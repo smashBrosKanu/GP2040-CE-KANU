@@ -128,6 +128,7 @@ src/addons/slider_socd.cpp
 src/addons/wiiext.cpp
 src/gamepad/GamepadDebouncer.cpp
 src/gamepad/GamepadDescriptors.cpp
+src/addons/tilt.cpp # 追加された行
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_${CMAKE_PROJECT_VERSION}_${GP2040_BOARDCONFIG})

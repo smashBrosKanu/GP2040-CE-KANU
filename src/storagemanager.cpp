@@ -31,6 +31,7 @@
 #include "addons/turbo.h"
 #include "addons/slider_socd.h"
 #include "addons/wiiext.h"
+#include "addons/tilt.h"
 
 #include "bitmaps.h"
 
@@ -155,6 +156,17 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.pinDualDirUp      		= PIN_DUAL_DIRECTIONAL_UP;
 	addonOptions.pinDualDirLeft    		= PIN_DUAL_DIRECTIONAL_LEFT;
 	addonOptions.pinDualDirRight   		= PIN_DUAL_DIRECTIONAL_RIGHT;
+	addonOptions.pinTilt1 = PIN_TILT_1;
+	addonOptions.pinTilt2 = PIN_TILT_2;
+	addonOptions.pinTiltFunction = PIN_TILT_FUNCTION;
+	addonOptions.pinTiltLeftAnalogDown = PIN_TILT_LEFT_ANALOG_DOWN;
+	addonOptions.pinTiltLeftAnalogUp = PIN_TILT_LEFT_ANALOG_UP;
+	addonOptions.pinTiltLeftAnalogLeft = PIN_TILT_LEFT_ANALOG_LEFT;
+	addonOptions.pinTiltLeftAnalogRight = PIN_TILT_LEFT_ANALOG_RIGHT;
+	addonOptions.pinTiltRightAnalogDown = PIN_TILT_RIGHT_ANALOG_DOWN;
+	addonOptions.pinTiltRightAnalogUp = PIN_TILT_RIGHT_ANALOG_UP;
+	addonOptions.pinTiltRightAnalogLeft = PIN_TILT_RIGHT_ANALOG_LEFT;
+	addonOptions.pinTiltRightAnalogRight = PIN_TILT_RIGHT_ANALOG_RIGHT;
 	addonOptions.turboShotCount    		= DEFAULT_SHOT_PER_SEC;
 	addonOptions.pinTurboLED       		= TURBO_LED_PIN;
 	addonOptions.pinReverseLED     		= REVERSE_LED_PIN;
@@ -170,6 +182,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.onBoardLedMode			= BOARD_LED_TYPE;
 	addonOptions.dualDirDpadMode        = DUAL_DIRECTIONAL_STICK_MODE;
 	addonOptions.dualDirCombineMode     = DUAL_DIRECTIONAL_COMBINE_MODE;
+	addonOptions.tiltSOCDMode = TILT_SOCD_MODE;
 	addonOptions.analogAdcPinX      	= ANALOG_ADC_VRX;
 	addonOptions.analogAdcPinY      	= ANALOG_ADC_VRY;
 	addonOptions.bootselButtonMap		= BOOTSEL_BUTTON_MASK;
@@ -193,9 +206,9 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.shmupBtnMask3 = SHMUP_BUTTON3;
 	addonOptions.shmupBtnMask4 = SHMUP_BUTTON4;
 	addonOptions.pinShmupDial = PIN_SHMUP_DIAL;
-    addonOptions.sliderSOCDModeOne = SLIDER_SOCD_SLOT_ONE;
-    addonOptions.sliderSOCDModeTwo  = SLIDER_SOCD_SLOT_TWO;
-    addonOptions.sliderSOCDModeDefault = SLIDER_SOCD_SLOT_DEFAULT;
+  addonOptions.sliderSOCDModeOne = SLIDER_SOCD_SLOT_ONE;
+  addonOptions.sliderSOCDModeTwo  = SLIDER_SOCD_SLOT_TWO;
+  addonOptions.sliderSOCDModeDefault = SLIDER_SOCD_SLOT_DEFAULT;
 	addonOptions.wiiExtensionSDAPin    = WII_EXTENSION_I2C_SDA_PIN;
 	addonOptions.wiiExtensionSCLPin    = WII_EXTENSION_I2C_SCL_PIN;
 	addonOptions.wiiExtensionBlock     = (WII_EXTENSION_I2C_BLOCK == i2c0) ? 0 : 1;
@@ -205,6 +218,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
 	addonOptions.BuzzerSpeakerAddonEnabled = BUZZER_ENABLED;
 	addonOptions.DualDirectionalInputEnabled = DUAL_DIRECTIONAL_ENABLED;
+	addonOptions.TiltInputEnabled = TILT_ENABLED;
 	addonOptions.ExtraButtonAddonEnabled = EXTRA_BUTTON_ENABLED;
 	addonOptions.I2CAnalog1219InputEnabled = I2C_ANALOG1219_ENABLED;
 	addonOptions.JSliderInputEnabled    = JSLIDER_ENABLED;

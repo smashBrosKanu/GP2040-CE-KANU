@@ -16,7 +16,7 @@ typedef struct
 
 struct GamepadOptions
 {
-	InputMode inputMode {InputMode::INPUT_MODE_XINPUT}; 
+	InputMode inputMode {InputMode::INPUT_MODE_SWITCH};
 	DpadMode dpadMode {DpadMode::DPAD_MODE_DIGITAL};
 	SOCDMode socdMode {SOCDMode::SOCD_MODE_NEUTRAL};
 	bool invertXAxis;

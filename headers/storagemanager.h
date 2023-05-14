@@ -113,6 +113,18 @@ struct AddonOptions {
 	uint8_t pinDualDirRight;
 	DpadMode dualDirDpadMode;    // LS/DP/RS
 	uint8_t dualDirCombineMode; // Mix/Gamepad/Dual/None
+	uint8_t pinTilt1;    // Pins for Tilt Input
+	uint8_t pinTilt2;
+	uint8_t pinTiltFunction;
+	uint8_t pinTiltLeftAnalogUp;
+	uint8_t pinTiltLeftAnalogDown;
+	uint8_t pinTiltLeftAnalogLeft;
+	uint8_t pinTiltLeftAnalogRight;
+	uint8_t pinTiltRightAnalogUp;
+	uint8_t pinTiltRightAnalogDown;
+	uint8_t pinTiltRightAnalogLeft;
+	uint8_t pinTiltRightAnalogRight;
+	SOCDMode tiltSOCDMode; // SOCE
 	OnBoardLedMode onBoardLedMode;
 	uint8_t analogAdcPinX;
 	uint8_t analogAdcPinY;
@@ -149,6 +161,7 @@ struct AddonOptions {
 	uint8_t BootselButtonAddonEnabled;
 	uint8_t BuzzerSpeakerAddonEnabled;
 	uint8_t DualDirectionalInputEnabled;
+	uint8_t TiltInputEnabled;
 	uint8_t ExtraButtonAddonEnabled;
 	uint8_t I2CAnalog1219InputEnabled;
 	//bool I2CDisplayAddonEnabled; // I2C is special case
