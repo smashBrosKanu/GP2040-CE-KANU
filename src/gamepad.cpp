@@ -193,6 +193,8 @@ void Gamepad::read()
 	//Probably I add function in this line
 	//Consider about how effect that function for program
 
+
+
 	#ifdef PIN_SETTINGS
 	state.aux = 0
 		| ((values & (1 << PIN_SETTINGS)) ? (1 << 0) : 0)

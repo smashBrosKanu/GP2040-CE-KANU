@@ -2,7 +2,7 @@
 #include <i2c_slave.h>
 #include "pico/stdlib.h"
 #include <cstdio>
-#include "tusb.h"
+//#include "tusb.h"
 #include "SplitController.h"
 
 #define I2C_ADDR  0x17
@@ -53,7 +53,7 @@ void print_binary(uint8_t byte) {
 int main()  
 {
     stdio_init_all();
-    tusb_init();
+    //tusb_init();
     i2c_init(i2c0, 400 * 1000);
     gpio_set_function(I2C_SDA, GPIO_FUNC_I2C);
     gpio_set_function(I2C_SCL, GPIO_FUNC_I2C);
@@ -77,10 +77,10 @@ int main()
         int result = i2c_read_blocking(i2c0, I2C_ADDR, buf_i2c, 4, false);
 
         if (result < 0) {  // if an error occurred during the read operation
-            printf("Failed to read data from slave. Error code: %d\n", result);
+            //printf("Failed to read data from slave. Error code: %d\n", result);
         }
         else if (result != 4) {  // if the read operation did not get 4 bytes
-            printf("Failed to read expected number of bytes. Got %d bytes instead of 4.\n", result);
+            //printf("Failed to read expected number of bytes. Got %d bytes instead of 4.\n", result);
         }
         else {
             // Cast the byte array to a uint32_t
@@ -88,11 +88,11 @@ int main()
 
             //debouncer.debounce(&data);
 
-            printf("Slave: ");
-            for (int i = 31; i >= 0; --i) {
-                printf("%d", (data >> i) & 1);
-            }
-            printf("\n");
+            //printf("Slave: ");
+            //for (int i = 31; i >= 0; --i) {
+            //    printf("%d", (data >> i) & 1);
+            //}
+            //printf("\n");
 
             //printf("Master: ");
             //for (int i = 31; i >= 0; --i) {
@@ -107,7 +107,7 @@ int main()
             //printf("\n");
 
 
-            fflush(stdout);  // Make sure the output is printed immediately
+            //fflush(stdout);  // Make sure the output is printed immediately
         }
 
         sleep_ms(500);
