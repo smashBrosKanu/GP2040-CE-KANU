@@ -150,6 +150,7 @@ ArduinoJson
 rndis
 hardware_adc
 WiiExtension
+SplitController
 pico_mbedtls
 TinyUSB_Gamepad
 )

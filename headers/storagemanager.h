@@ -156,6 +156,10 @@ struct AddonOptions {
 	uint8_t wiiExtensionSCLPin;
 	int wiiExtensionBlock;
 	uint32_t wiiExtensionSpeed;
+	uint8_t splitControllerSDAPin;
+	uint8_t splitControllerSCLPin;
+	int splitControllerBlock;
+	uint32_t splitControllerSpeed;
 	uint8_t AnalogInputEnabled;
 	uint8_t BoardLedAddonEnabled;
 	uint8_t BootselButtonAddonEnabled;
@@ -174,6 +178,7 @@ struct AddonOptions {
 	uint8_t TurboInputEnabled;
 	uint8_t SliderSOCDInputEnabled;
 	uint8_t WiiExtensionAddonEnabled;
+	uint8_t SplitControllerAddonEnabled;
 	uint32_t checksum;
 };
 

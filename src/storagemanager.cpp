@@ -32,6 +32,7 @@
 #include "addons/slider_socd.h"
 #include "addons/wiiext.h"
 #include "addons/tilt.h"
+#include "addons/split.h"
 
 #include "bitmaps.h"
 
@@ -213,6 +214,10 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.wiiExtensionSCLPin    = WII_EXTENSION_I2C_SCL_PIN;
 	addonOptions.wiiExtensionBlock     = (WII_EXTENSION_I2C_BLOCK == i2c0) ? 0 : 1;
 	addonOptions.wiiExtensionSpeed     = WII_EXTENSION_I2C_SPEED;
+	addonOptions.splitControllerSDAPin = SPLIT_CONTROLLER_I2C_SDA_PIN;
+	addonOptions.splitControllerSCLPin = SPLIT_CONTROLLER_I2C_SCL_PIN;
+	addonOptions.splitControllerBlock = (SPLIT_CONTROLLER_I2C_BLOCK == i2c0) ? 0 : 1;
+	addonOptions.splitControllerSpeed = SPLIT_CONTROLLER_I2C_SPEED;
 	addonOptions.AnalogInputEnabled     = ANALOG_INPUT_ENABLED;
 	addonOptions.BoardLedAddonEnabled   = BOARD_LED_ENABLED;
 	addonOptions.BootselButtonAddonEnabled = BOOTSEL_BUTTON_ENABLED;
@@ -228,6 +233,7 @@ void Storage::setDefaultAddonOptions()
 	addonOptions.ReverseInputEnabled    = REVERSE_ENABLED;
 	addonOptions.TurboInputEnabled      = TURBO_ENABLED;
 	addonOptions.WiiExtensionAddonEnabled      = WII_EXTENSION_ENABLED;
+	addonOptions.SplitControllerAddonEnabled = SPLIT_CONTROLLER_ENABLED;
 	setAddonOptions(addonOptions);
 }
 
