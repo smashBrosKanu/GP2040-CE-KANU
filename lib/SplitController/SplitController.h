@@ -74,6 +74,7 @@ class SplitController {
 
     // Constructor 
 	SplitController(int sda, int scl, i2c_inst_t *i2cCtl, int32_t speed, uint8_t addr);
+	SplitController();
 
 	uint32_t getSlaveButtonState() {
 		i2c_init(i2c0, 400 * 1000);
@@ -84,7 +85,9 @@ class SplitController {
 
 		uint8_t idRead[4] = { 0 };
 		int result = i2c_read_blocking(i2c0, 0x17, idRead, 4, false);
+
 		//waitUntil_us(SPLIT_CONTROLLER_DELAY);
+
 		uint32_t slaveButtonState = idRead[0] | (idRead[1] << 8) | (idRead[2] << 16) | (idRead[3] << 24);
 		return slaveButtonState;
 	};

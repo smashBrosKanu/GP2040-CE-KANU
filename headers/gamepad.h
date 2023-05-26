@@ -15,6 +15,7 @@
 #include "gamepad/descriptors/PS4Descriptors.h"
 
 #include "pico/stdlib.h"
+#include "SplitController.h"
 
 // MUST BE DEFINED FOR MPG
 extern uint32_t getMillis();
@@ -156,6 +157,8 @@ public:
 	GamepadButtonMapping *mapButtonA1;
 	GamepadButtonMapping *mapButtonA2;
 	GamepadButtonMapping **gamepadMappings;
+
+	//SplitController* splitController;
 
 	inline static const SOCDMode resolveSOCDMode(const GamepadOptions& options) {
 		 return ((options.socdMode == SOCD_MODE_BYPASS) && 
