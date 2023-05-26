@@ -74,7 +74,6 @@ class SplitController {
 
     // Constructor 
 	SplitController(int sda, int scl, i2c_inst_t *i2cCtl, int32_t speed, uint8_t addr);
-	SplitController();
 
 	uint32_t getSlaveButtonState() {
 		i2c_init(i2c0, 400 * 1000);
