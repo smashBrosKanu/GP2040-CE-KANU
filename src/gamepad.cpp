@@ -9,6 +9,7 @@
 
 #include "FlashPROM.h"
 #include "CRC32.h"
+#include "SplitController.h"
 
 // MUST BE DEFINED for mpgs
 uint32_t getMillis() {
@@ -75,6 +76,7 @@ static XInputReport xinputReport
 static TouchpadData touchpadData;
 static uint8_t last_report_counter = 0;
 
+//SplitController* myController = new SplitController(0, 1, i2c0, 400000, 0x17);
 
 static KeyboardReport keyboardReport
 {
@@ -89,6 +91,8 @@ void Gamepad::setup()
 	// Configure pin mapping
 	f2Mask = (GAMEPAD_MASK_A1 | GAMEPAD_MASK_S2);
 	const BoardOptions& boardOptions = Storage::getInstance().getBoardOptions();
+
+	//myController = new SplitController(0, 1, i2c0, 400000, 0x17);
 
 	mapDpadUp    = new GamepadButtonMapping(boardOptions.pinDpadUp,    GAMEPAD_MASK_UP);
 	mapDpadDown  = new GamepadButtonMapping(boardOptions.pinDpadDown,  GAMEPAD_MASK_DOWN);
@@ -194,7 +198,11 @@ void Gamepad::process()
 void Gamepad::read()
 {
 	// Need to invert since we're using pullups
-	uint32_t values = ~gpio_get_all();
+	uint32_t masterButtonState = ~gpio_get_all();
+	SplitController* splitController = new SplitController(0, 1, i2c0, 400000, 0x17);
+	uint32_t slaveButtonState = ~splitController->getSlaveButtonState();
+
+	uint32_t values = masterButtonState | slaveButtonState;
 
 	//Probably I add function in this line
 	//Consider about how effect that function for program

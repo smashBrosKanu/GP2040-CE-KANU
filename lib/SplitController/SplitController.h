@@ -49,7 +49,7 @@
 #define SPLIT_ALARM_NUM 0
 #define SPLIT_ALARM_IRQ TIMER_IRQ_0
 
-static volatile bool WiiExtension_alarmFired;
+static volatile bool SplitController_alarmFired;
 
 #define BYTE_TO_BINARY_PATTERN "%c%c%c%c%c%c%c%c"
 #define BYTE_TO_BINARY(byte)  \
@@ -70,9 +70,24 @@ class SplitController {
     int8_t dataType = SPLIT_DATA_TYPE_0;
 
     bool isReady         = false;
+		uint32_t slaveButtonState; // Button state variable
 
     // Constructor 
-	WiiExtension(int sda, int scl, i2c_inst_t *i2cCtl, int32_t speed, uint8_t addr);
+	SplitController(int sda, int scl, i2c_inst_t *i2cCtl, int32_t speed, uint8_t addr);
+
+	uint32_t getSlaveButtonState() {
+		i2c_init(i2c0, 400 * 1000);
+    gpio_set_function(0, GPIO_FUNC_I2C);
+    gpio_set_function(1, GPIO_FUNC_I2C);
+    gpio_pull_up(0);
+    gpio_pull_up(1);
+
+		uint8_t idRead[4] = { 0 };
+		int result = i2c_read_blocking(i2c0, 0x17, idRead, 4, false);
+		//waitUntil_us(SPLIT_CONTROLLER_DELAY);
+		uint32_t slaveButtonState = idRead[0] | (idRead[1] << 8) | (idRead[2] << 16) | (idRead[3] << 24);
+		return slaveButtonState;
+	};
 
     // Methods
     void begin();
@@ -87,6 +102,9 @@ class SplitController {
     i2c_inst_t *picoI2C;
 
 	int32_t iSpeed;
+
+	uint16_t map(uint16_t x, uint16_t in_min, uint16_t in_max, uint16_t out_min, uint16_t out_max);
+	uint16_t calibrate(uint16_t pos, uint16_t min, uint16_t max, uint16_t center);
 
     int doI2CWrite(uint8_t *pData, int iLen);
     int doI2CRead(uint8_t *pData, int iLen);

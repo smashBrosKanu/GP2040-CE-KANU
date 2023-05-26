@@ -27,7 +27,7 @@
 
 # pico_add_extra_outputs(your_project)
 
-add_library(SplitController SplitControllerMain.cpp)
+add_library(SplitController SplitController.cpp)
 target_link_libraries(
     SplitController
     pico_stdlib
