@@ -834,19 +834,6 @@ std::string setAddonOptions()
 {
 	DynamicJsonDocument doc = get_post_data();
 
-	docToPin(addonOptions.pinTilt1, doc, "tilt1Pin");
-	docToPin(addonOptions.pinTilt2, doc, "tilt2Pin");
-	docToPin(addonOptions.pinTiltFunction, doc, "tiltFunctionPin");
-	docToPin(addonOptions.pinTiltLeftAnalogUp, doc, "tiltLeftAnalogUpPin");
-	docToPin(addonOptions.pinTiltLeftAnalogDown, doc, "tiltLeftAnalogDownPin");
-	docToPin(addonOptions.pinTiltLeftAnalogLeft, doc, "tiltLeftAnalogLeftPin");
-	docToPin(addonOptions.pinTiltLeftAnalogRight, doc, "tiltLeftAnalogRightPin");
-	docToPin(addonOptions.pinTiltRightAnalogUp, doc, "tiltRightAnalogUpPin");
-	docToPin(addonOptions.pinTiltRightAnalogDown, doc, "tiltRightAnalogDownPin");
-	docToPin(addonOptions.pinTiltRightAnalogLeft, doc, "tiltRightAnalogLeftPin");
-	docToPin(addonOptions.pinTiltRightAnalogRight, doc, "tiltRightAnalogRightPin");
-	docToValue(addonOptions.tiltSOCDMode, doc, "tiltSOCDMode");
-
     AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
 	docToPin(analogOptions.analogAdcPinX, doc, "analogAdcPinX");
 	docToPin(analogOptions.analogAdcPinY, doc, "analogAdcPinY");
@@ -869,6 +856,21 @@ std::string setAddonOptions()
 	docToValue(dualDirectionalOptions.dpadMode, doc, "dualDirDpadMode");
 	docToValue(dualDirectionalOptions.combineMode, doc, "dualDirCombineMode");
 	docToValue(dualDirectionalOptions.enabled, doc, "DualDirectionalInputEnabled");
+
+		TiltOptions& tiltOptions = Storage::getInstance().getAddonOptions().tiltOptions;
+	docToPin(tiltOptions.tilt1Pin, doc, "tiltPin");
+	docToPin(tiltOptions.tilt2Pin, doc, "tilt2Pin");
+	docToPin(tiltOptions.tiltFunctionPin, doc, "tiltFunctionPin");
+	docToPin(tiltOptions.tiltLeftAnalogUpPin, doc, "tiltLeftAnalogUpPin");
+	docToPin(tiltOptions.tiltLeftAnalogDownPin, doc, "tiltLeftAnalogDownPin");
+	docToPin(tiltOptions.tiltLeftAnalogLeftPin, doc, "tiltLeftAnalogLeftPin");
+	docToPin(tiltOptions.tiltLeftAnalogRightPin, doc, "tiltLeftAnalogRightPin");
+	docToPin(tiltOptions.tiltRightAnalogUpPin, doc, "tiltRightAnalogUpPin");
+	docToPin(tiltOptions.tiltRightAnalogDownPin, doc, "tiltRightAnalogDownPin");
+	docToPin(tiltOptions.tiltRightAnalogLeftPin, doc, "tiltRightAnalogLeftPin");
+	docToPin(tiltOptions.tiltRightAnalogRightPin, doc, "tiltRightAnalogRightPin");
+	docToValue(tiltOptions.tiltSOCDMode, doc, "tiltSOCDMode");
+	docToValue(tiltOptions.enabled, doc, "TiltInputEnabled");
 
     ExtraButtonOptions& extraButtonOptions = Storage::getInstance().getAddonOptions().extraButtonOptions;
 	docToPin(extraButtonOptions.pin, doc, "extraButtonPin");
@@ -1056,19 +1058,6 @@ std::string getAddonOptions()
 {
 	DynamicJsonDocument doc(LWIP_HTTPD_POST_MAX_PAYLOAD_LEN);
 
-	writeDoc(doc, "tilt1Pin", addonOptions.pinTilt1 == 0xFF ? -1 : addonOptions.pinTilt1);
-	writeDoc(doc, "tilt2Pin", addonOptions.pinTilt2 == 0xFF ? -1 : addonOptions.pinTilt2);
-	writeDoc(doc, "tiltFunctionPin", addonOptions.pinTiltFunction == 0xFF ? -1 : addonOptions.pinTiltFunction);
-	writeDoc(doc, "tiltLeftAnalogUpPin", addonOptions.pinTiltLeftAnalogUp == 0xFF ? -1 : addonOptions.pinTiltLeftAnalogUp);
-	writeDoc(doc, "tiltLeftAnalogDownPin", addonOptions.pinTiltLeftAnalogDown == 0xFF ? -1 : addonOptions.pinTiltLeftAnalogDown);
-	writeDoc(doc, "tiltLeftAnalogLeftPin", addonOptions.pinTiltLeftAnalogLeft == 0xFF ? -1 : addonOptions.pinTiltLeftAnalogLeft);
-	writeDoc(doc, "tiltLeftAnalogRightPin", addonOptions.pinTiltLeftAnalogRight == 0xFF ? -1 : addonOptions.pinTiltLeftAnalogRight);
-	writeDoc(doc, "tiltRightAnalogUpPin", addonOptions.pinTiltRightAnalogUp == 0xFF ? -1 : addonOptions.pinTiltRightAnalogUp);
-	writeDoc(doc, "tiltRightAnalogDownPin", addonOptions.pinTiltRightAnalogDown == 0xFF ? -1 : addonOptions.pinTiltRightAnalogDown);
-	writeDoc(doc, "tiltRightAnalogLeftPin", addonOptions.pinTiltRightAnalogLeft == 0xFF ? -1 : addonOptions.pinTiltRightAnalogLeft);
-	writeDoc(doc, "tiltRightAnalogRightPin", addonOptions.pinTiltRightAnalogRight == 0xFF ? -1 : addonOptions.pinTiltRightAnalogRight);
-	writeDoc(doc, "tiltSOCDMode", addonOptions.tiltSOCDMode);
-
     const AnalogOptions& analogOptions = Storage::getInstance().getAddonOptions().analogOptions;
 	writeDoc(doc, "analogAdcPinX", cleanPin(analogOptions.analogAdcPinX));
 	writeDoc(doc, "analogAdcPinY", cleanPin(analogOptions.analogAdcPinY));
@@ -1091,6 +1080,21 @@ std::string getAddonOptions()
 	writeDoc(doc, "dualDirDpadMode", dualDirectionalOptions.dpadMode);
 	writeDoc(doc, "dualDirCombineMode", dualDirectionalOptions.combineMode);
 	writeDoc(doc, "DualDirectionalInputEnabled", dualDirectionalOptions.enabled);
+
+		const TiltOptions& tiltOptions = Storage::getInstance().getAddonOptions().tiltOptions;
+	writeDoc(doc, "tilt1Pin", cleanPin(tiltOptions.tilt1Pin));
+	writeDoc(doc, "tilt2Pin", cleanPin(tiltOptions.tilt2Pin));
+	writeDoc(doc, "tiltFunctionPin", cleanPin(tiltOptions.tiltFunctionPin));
+	writeDoc(doc, "tiltLeftAnalogUpPin", cleanPin(tiltOptions.tiltLeftAnalogUpPin));
+	writeDoc(doc, "tiltLeftAnalogDownPin", cleanPin(tiltOptions.tiltLeftAnalogDownPin));
+	writeDoc(doc, "tiltLeftAnalogLeftPin", cleanPin(tiltOptions.tiltLeftAnalogLeftPin));
+	writeDoc(doc, "tiltLeftAnalogRightPin", cleanPin(tiltOptions.tiltLeftAnalogRightPin));
+	writeDoc(doc, "tiltRightAnalogUpPin", cleanPin(tiltOptions.tiltRightAnalogUpPin));
+	writeDoc(doc, "tiltRightAnalogDownPin", cleanPin(tiltOptions.tiltRightAnalogDownPin));
+	writeDoc(doc, "tiltRightAnalogLeftPin", cleanPin(tiltOptions.tiltRightAnalogLeftPin));
+	writeDoc(doc, "tiltRightAnalogRightPin", cleanPin(tiltOptions.tiltRightAnalogRightPin));
+	writeDoc(doc, "tiltSOCDMode", tiltOptions.tiltSOCDMode);
+	writeDoc(doc, "TiltInputEnabled", tiltOptions.enabled);
 
     const ExtraButtonOptions& extraButtonOptions = Storage::getInstance().getAddonOptions().extraButtonOptions;
 	writeDoc(doc, "extraButtonPin", cleanPin(extraButtonOptions.pin));
