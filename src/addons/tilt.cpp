@@ -2,6 +2,8 @@
 #include "storagemanager.h"
 #include "gamepad.h"
 
+SplitController* myController0 = new SplitController(0, 1, i2c0, 400000, 0x17);
+
 bool TiltInput::available() {
 	AddonOptions options = Storage::getInstance().getAddonOptions();
 	pinTilt1 = options.pinTilt1;
@@ -43,6 +45,20 @@ void TiltInput::setup() {
 			gpio_pull_up(pinTilt[i]);          // Set as PULLUP
 		}
 	}
+
+	maskTilt1 = 1UL << pinTilt1;
+	maskTilt2 = 1UL << pinTilt2;
+	maskTiltFunction = 1UL << pinTiltFunction;
+	maskTiltLeftAnalogDown = 1UL << pinTiltLeftAnalogDown;
+	maskTiltLeftAnalogUp = 1UL << pinTiltLeftAnalogUp;
+	maskTiltLeftAnalogLeft = 1UL << pinTiltLeftAnalogLeft;
+	maskTiltLeftAnalogRight = 1UL << pinTiltLeftAnalogRight;
+	maskTiltRightAnalogDown = 1UL << pinTiltRightAnalogDown;
+	maskTiltRightAnalogUp = 1UL << pinTiltRightAnalogUp;
+	maskTiltRightAnalogLeft = 1UL << pinTiltRightAnalogLeft;
+	maskTiltRightAnalogRight = 1UL << pinTiltRightAnalogRight;
+
+	myController0 = new SplitController(0, 1, i2c0, 400000, 0x17);
 
 	dDebLeftState = 0;
 	dDebRightState = 0;
@@ -92,32 +108,38 @@ void TiltInput::preprocess()
 	Gamepad* gamepad = Storage::getInstance().GetGamepad();
 
 	// Need to invert since we're using pullups
+	uint32_t masterButtonState = ~gpio_get_all();
+	uint32_t slaveButtonState = ~myController0->getSlaveButtonState();
+
+	values = masterButtonState | slaveButtonState;
+
+	// Need to invert since we're using pullups
 	tiltLeftState = 0;
 	if (pinTiltLeftAnalogUp != (uint8_t)-1) {
-		tiltLeftState |= (!gpio_get(pinTiltLeftAnalogUp) ? gamepad->mapDpadUp->buttonMask : 0);
+		tiltLeftState |= ((values & maskTiltLeftAnalogUp) ? gamepad->mapDpadUp->buttonMask : 0);
 	}
 	if (pinTiltLeftAnalogDown != (uint8_t)-1) {
-		tiltLeftState |= (!gpio_get(pinTiltLeftAnalogDown) ? gamepad->mapDpadDown->buttonMask : 0);
+		tiltLeftState |= ((values & maskTiltLeftAnalogDown) ? gamepad->mapDpadDown->buttonMask : 0);
 	}
 	if (pinTiltLeftAnalogLeft != (uint8_t)-1) {
-		tiltLeftState |= (!gpio_get(pinTiltLeftAnalogLeft) ? gamepad->mapDpadLeft->buttonMask : 0);
+		tiltLeftState |= ((values & maskTiltLeftAnalogLeft) ? gamepad->mapDpadLeft->buttonMask : 0);
 	}
 	if (pinTiltLeftAnalogRight != (uint8_t)-1) {
-		tiltLeftState |= (!gpio_get(pinTiltLeftAnalogRight) ? gamepad->mapDpadRight->buttonMask : 0);
+		tiltLeftState |= ((values & maskTiltLeftAnalogRight) ? gamepad->mapDpadRight->buttonMask : 0);
 	}
 
 	tiltRightState = 0;
 	if (pinTiltRightAnalogUp != (uint8_t)-1) {
-		tiltRightState |= (!gpio_get(pinTiltRightAnalogUp) ? gamepad->mapDpadUp->buttonMask : 0);
+		tiltRightState |= ((values & maskTiltRightAnalogUp) ? gamepad->mapDpadUp->buttonMask : 0);
 	}
 	if (pinTiltRightAnalogDown != (uint8_t)-1) {
-		tiltRightState |= (!gpio_get(pinTiltRightAnalogDown) ? gamepad->mapDpadDown->buttonMask : 0);
+		tiltRightState |= ((values & maskTiltRightAnalogDown) ? gamepad->mapDpadDown->buttonMask : 0);
 	}
 	if (pinTiltRightAnalogLeft != (uint8_t)-1) {
-		tiltRightState |= (!gpio_get(pinTiltRightAnalogLeft) ? gamepad->mapDpadLeft->buttonMask : 0);
+		tiltRightState |= ((values & maskTiltRightAnalogLeft) ? gamepad->mapDpadLeft->buttonMask : 0);
 	}
 	if (pinTiltRightAnalogRight != (uint8_t)-1) {
-		tiltRightState |= (!gpio_get(pinTiltRightAnalogRight) ? gamepad->mapDpadRight->buttonMask : 0);
+		tiltRightState |= ((values & maskTiltRightAnalogRight) ? gamepad->mapDpadRight->buttonMask : 0);
 	}
 
 	// Debounce our directional pins
@@ -142,13 +164,6 @@ void TiltInput::process()
 }
 
 void TiltInput::OverrideGamepad(Gamepad* gamepad, uint8_t dpad1, uint8_t dpad2) {
-	// L2 R2 button state check
-	//uint8_t gamepadButtonState = gamepad->state.buttons;
-	bool pinTilt1Pressed = pinTilt1 != (uint8_t)-1 && !gpio_get(pinTilt1);
-	bool pinTilt2Pressed = pinTilt2 != (uint8_t)-1 && !gpio_get(pinTilt2);
-	bool pinTiltFunctionPressed = pinTiltFunction != (uint8_t)-1 && !gpio_get(pinTiltFunction);
-	//bool pinButtonL2Pressed = gamepadButtonState & GAMEPAD_MASK_L2;
-	//bool pinButtonR2Pressed = gamepadButtonState & GAMEPAD_MASK_R2;
 
 	// For left analog
 	//if(pinButtonL2Pressed || pinButtonR2Pressed){
@@ -165,11 +180,11 @@ void TiltInput::OverrideGamepad(Gamepad* gamepad, uint8_t dpad1, uint8_t dpad2) 
 	//		gamepad->state.ly = dpadToAnalogY(dpad1);
 	//	}
 	//}
-	if (pinTilt1Pressed) {
+	if (values & maskTilt1) {
 		gamepad->state.lx = dpadToAnalogX(dpad1) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogX(dpad1)) * 0.35;
 		gamepad->state.ly = dpadToAnalogY(dpad1) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogY(dpad1)) * 0.45;
 	}
-	else if (pinTilt2Pressed) {
+	else if (values & maskTilt2) {
 		gamepad->state.lx = dpadToAnalogX(dpad1) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogX(dpad1)) * 0.65;
 		gamepad->state.ly = dpadToAnalogY(dpad1) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogY(dpad1)) * 0.35;
 	}
@@ -180,16 +195,16 @@ void TiltInput::OverrideGamepad(Gamepad* gamepad, uint8_t dpad1, uint8_t dpad2) 
 
 	// For right analog
 //Hold Function button turn on Home, minus, plus, capture.
-	if (pinTiltFunctionPressed) {
+	if (values & maskTiltFunction) {
 		gamepad->state.buttons |= (dpad2 & GAMEPAD_MASK_LEFT) ? GAMEPAD_MASK_S1 : 0;
 		gamepad->state.buttons |= (dpad2 & GAMEPAD_MASK_DOWN) ? GAMEPAD_MASK_A1 : 0;
 		gamepad->state.buttons |= (dpad2 & GAMEPAD_MASK_RIGHT) ? GAMEPAD_MASK_S2 : 0;
 		gamepad->state.buttons |= (dpad2 & GAMEPAD_MASK_UP) ? GAMEPAD_MASK_A2 : 0;
 	}
-	else if (pinTilt1Pressed && pinTilt2Pressed) {
+	else if ((values & maskTilt1) && (values & maskTilt2)) {
 		gamepad->state.dpad = dpad2; //Hold tilt1 + tilt2 turn on D-Pad
 	}
-	else if (pinTilt1Pressed) {	
+	else if (values & maskTilt1) {
 		if (dpad2 & (GAMEPAD_MASK_LEFT | GAMEPAD_MASK_RIGHT)) {
 			gamepad->state.rx = dpadToAnalogX(dpad2) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogX(dpad2)) * 0.3;
 			gamepad->state.ry = GAMEPAD_JOYSTICK_MID * 1.7;
@@ -199,7 +214,7 @@ void TiltInput::OverrideGamepad(Gamepad* gamepad, uint8_t dpad1, uint8_t dpad2) 
 			gamepad->state.ry = dpadToAnalogY(dpad2);
 		}
 	}
-	else if (pinTilt2Pressed) {
+	else if (values & maskTilt2) {
 		if (dpad2 & (GAMEPAD_MASK_LEFT | GAMEPAD_MASK_RIGHT)) {
 			gamepad->state.rx = dpadToAnalogX(dpad2) + (GAMEPAD_JOYSTICK_MID - dpadToAnalogX(dpad2)) * 0.3;
 			gamepad->state.ry = GAMEPAD_JOYSTICK_MID * 0.3;

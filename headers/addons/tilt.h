@@ -95,6 +95,21 @@ private:
 	uint8_t pinTiltRightAnalogLeft;
 	uint8_t pinTiltRightAnalogRight;
 	SOCDMode tiltSOCDMode;
+
+	uint32_t maskTilt1;
+	uint32_t maskTilt2;
+	uint32_t maskTiltFunction;
+	uint32_t maskTiltLeftAnalogDown;
+	uint32_t maskTiltLeftAnalogUp;
+	uint32_t maskTiltLeftAnalogLeft;
+	uint32_t maskTiltLeftAnalogRight;
+	uint32_t maskTiltRightAnalogDown;
+	uint32_t maskTiltRightAnalogUp;
+	uint32_t maskTiltRightAnalogLeft;
+	uint32_t maskTiltRightAnalogRight;
+
+	uint32_t values;
+
 };
 
 #endif  // _Tilt_H
